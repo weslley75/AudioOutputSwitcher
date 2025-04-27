@@ -6,10 +6,12 @@ import android.content.Intent
 import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import android.util.Log
 import android.widget.Toast
 
 class AudioOutputTileService : TileService() {
     companion object {
+        private const val TAG = "AudioOutputTileService"
         private const val ACTION_MEDIA_OUTPUT =
             "com.android.systemui.action.LAUNCH_SYSTEM_MEDIA_OUTPUT_DIALOG"
         private const val PACKAGE_SYSTEMUI = "com.android.systemui"
@@ -39,7 +41,9 @@ class AudioOutputTileService : TileService() {
 
             pendingIntent.send()
         } catch (e: Exception) {
-            showToast("Erro: ${e.message}")
+            val errorMsg = "Failed to open audio output dialog: ${e.javaClass.simpleName}: ${e.message}"
+            Log.e(TAG, errorMsg, e)
+            showToast(errorMsg)
         }
     }
 
