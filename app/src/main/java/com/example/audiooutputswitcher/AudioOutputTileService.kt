@@ -3,16 +3,18 @@ package com.example.audiooutputswitcher
 import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.widget.Toast
 
 class AudioOutputTileService : TileService() {
     companion object {
-        private const val TAG = "AudioOutputTileService"
-        private const val ACTION_MEDIA_OUTPUT = "com.android.systemui.action.LAUNCH_SYSTEM_MEDIA_OUTPUT_DIALOG"
+        private const val ACTION_MEDIA_OUTPUT =
+            "com.android.systemui.action.LAUNCH_SYSTEM_MEDIA_OUTPUT_DIALOG"
         private const val PACKAGE_SYSTEMUI = "com.android.systemui"
-        private const val RECEIVER_CLASS = "com.android.systemui.media.dialog.MediaOutputDialogReceiver"
+        private const val RECEIVER_CLASS =
+            "com.android.systemui.media.dialog.MediaOutputDialogReceiver"
     }
 
     override fun onStartListening() {
@@ -43,7 +45,8 @@ class AudioOutputTileService : TileService() {
 
     private fun updateTile() {
         val tile = qsTile ?: return
-        tile.label = "Audio Output"
+        tile.label = getString(R.string.audio_output)
+        tile.icon = Icon.createWithResource(this, R.drawable.ic_audio_output)
         tile.state = Tile.STATE_ACTIVE
         tile.updateTile()
     }

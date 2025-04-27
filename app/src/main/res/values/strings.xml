@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Audio Output Switcher</string>
-    <string name="audio_output_tile_label">Audio Output</string>
+    <string name="app_name" translatable="false">Audio Output Switcher</string>
+    <string name="audio_output">Audio Output</string>
 </resources>
