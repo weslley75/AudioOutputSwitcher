@@ -94,11 +94,25 @@ jobs:
         echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         echo "release_name=Audio Output Switcher ${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
+    - name: Build debug APK
+      run: ./gradlew assembleDebug
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         name: ${{ steps.release_info.outputs.release_name }}
-        files: app/build/outputs/apk/release/*.apk
+        files: |
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/release/*.apk
+        body: |
+          ## 📱 Como instalar
+
+          **⚠️ Para instalação fácil, use o APK debug:**
+          - Baixe o arquivo `app-debug.apk`
+          - Este já vem assinado e pode ser instalado diretamente
+
+          **Para desenvolvedores:**
+          - O arquivo `app-release-unsigned.apk` precisa ser assinado antes da instalação
         generate_release_notes: true
         draft: false
         prerelease: false
