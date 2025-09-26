@@ -1,0 +1,18 @@
+O Audio Output Switcher adiciona um tile às Configurações Rápidas que fornece acesso instantâneo ao diálogo nativo de seleção de saída de áudio do Android.
+
+FUNCIONALIDADES:
+• Acesso rápido ao seletor de saída de áudio
+• Integração com o sistema nativo do Android
+• Suporte a todos os dispositivos de áudio conectados (fones, alto-falantes, Bluetooth)
+• Leve e sem consumo de bateria em segundo plano
+• Interface Material Design
+
+COMO USAR:
+1. Instale o aplicativo
+2. Abra as Configurações Rápidas (deslize duas vezes para baixo na barra de status)
+3. Edite os tiles e adicione "Audio Output"
+4. Toque no tile para alternar entre dispositivos de áudio
+
+Perfeito para usuários que frequentemente alternam entre fones de ouvido, alto-falantes e dispositivos Bluetooth.
+
+O aplicativo requer Android 15+ e integra-se diretamente com o MediaOutputDialog do sistema para uma experiência perfeita.

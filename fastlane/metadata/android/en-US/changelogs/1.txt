@@ -1,0 +1,6 @@
+Initial release of Audio Output Switcher:
+• Quick Settings tile for audio output switching
+• Native Android MediaOutputDialog integration
+• Support for headphones, speakers, and Bluetooth devices
+• Lightweight design with no background processes
+• Material Design interface

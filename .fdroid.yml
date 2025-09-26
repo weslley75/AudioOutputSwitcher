@@ -1,0 +1,31 @@
+Version: 1.0.0
+VersionCode: 1
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: v1.0.0
+    subdir: .
+    sudo:
+      - apt-get update
+      - apt-get install -y openjdk-17-jdk-headless
+      - update-java-alternatives -a
+    gradle:
+      - release
+
+Metadata:
+  Categories:
+    - System
+  License: MIT
+  AuthorName: WA Systems
+  AuthorEmail: weslley75@protonmail.com
+  IssueTracker: https://github.com/weslley75/AudioOutputSwitcher/issues
+  SourceCode: https://github.com/weslley75/AudioOutputSwitcher
+  Changelog: https://github.com/weslley75/AudioOutputSwitcher/releases
+
+RequiresRoot: false
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
