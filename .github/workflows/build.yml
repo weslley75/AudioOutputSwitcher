@@ -85,7 +85,14 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Decode keystore
+      run: |
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > AudioOutputSwitcher.jks
+
     - name: Build release APK
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: ./gradlew assembleRelease
 
     - name: Get release info
@@ -107,12 +114,13 @@ jobs:
         body: |
           ## 📱 Como instalar
 
-          **⚠️ Para instalação fácil, use o APK debug:**
-          - Baixe o arquivo `app-debug.apk`
-          - Este já vem assinado e pode ser instalado diretamente
+          **✅ APK Release (Recomendado):**
+          - Baixe o arquivo `app-release.apk`
+          - APK assinado e otimizado para produção
 
-          **Para desenvolvedores:**
-          - O arquivo `app-release-unsigned.apk` precisa ser assinado antes da instalação
+          **🔧 APK Debug:**
+          - Alternativa com símbolos de debug
+          - Ideal para testes e desenvolvimento
         generate_release_notes: true
         draft: false
         prerelease: false
