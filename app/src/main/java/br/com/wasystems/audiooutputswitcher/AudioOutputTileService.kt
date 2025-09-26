@@ -1,4 +1,4 @@
-package com.example.audiooutputswitcher
+package br.com.wasystems.audiooutputswitcher
 
 import android.app.PendingIntent
 import android.content.ComponentName
@@ -9,6 +9,17 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import android.widget.Toast
 
+/**
+ * Serviço de tile para configurações rápidas que permite acesso rápido ao
+ * diálogo nativo de seleção de saída de áudio do Android.
+ *
+ * Este tile integra-se com o SystemUI do Android para abrir o diálogo
+ * de saída de áudio que permite alternar entre dispositivos como
+ * fones de ouvido, alto-falantes e dispositivos Bluetooth.
+ *
+ * @author WA Systems
+ * @since 1.0.0
+ */
 class AudioOutputTileService : TileService() {
     companion object {
         private const val TAG = "AudioOutputTileService"
@@ -24,11 +35,22 @@ class AudioOutputTileService : TileService() {
         updateTile()
     }
 
+    /**
+     * Chamado quando o usuário toca no tile.
+     * Abre o diálogo de seleção de saída de áudio.
+     */
     override fun onClick() {
         super.onClick()
         openMediaOutputDialog()
     }
 
+    /**
+     * Abre o diálogo nativo de seleção de saída de áudio do Android.
+     *
+     * Envia um broadcast para o SystemUI solicitando a abertura do
+     * diálogo de saída de áudio. Em caso de erro, exibe uma mensagem
+     * de toast para o usuário.
+     */
     private fun openMediaOutputDialog() {
         try {
             val intent = Intent(ACTION_MEDIA_OUTPUT).apply {
@@ -47,6 +69,11 @@ class AudioOutputTileService : TileService() {
         }
     }
 
+    /**
+     * Atualiza as propriedades visuais do tile.
+     *
+     * Define o rótulo, ícone e estado do tile nas configurações rápidas.
+     */
     private fun updateTile() {
         val tile = qsTile ?: return
         tile.label = getString(R.string.audio_output)
@@ -55,6 +82,11 @@ class AudioOutputTileService : TileService() {
         tile.updateTile()
     }
 
+    /**
+     * Exibe uma mensagem toast para o usuário.
+     *
+     * @param message A mensagem a ser exibida
+     */
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.audiooutputswitcher"
+    namespace = "br.com.wasystems.audiooutputswitcher"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.audiooutputswitcher"
+        applicationId = "br.com.wasystems.audiooutputswitcher"
         minSdk = 35
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

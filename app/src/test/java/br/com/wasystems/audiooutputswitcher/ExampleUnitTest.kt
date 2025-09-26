@@ -1,4 +1,4 @@
-package com.example.audiooutputswitcher
+package br.com.wasystems.audiooutputswitcher
 
 import org.junit.Test
 
