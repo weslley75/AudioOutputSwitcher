@@ -17,9 +17,30 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val envKeystorePassword = System.getenv("KEYSTORE_PASSWORD")
+            val envKeyPassword = System.getenv("KEY_PASSWORD")
+
+            if (envKeystorePassword != null && envKeyPassword != null) {
+                storeFile = file("../AudioOutputSwitcher.jks")
+                storePassword = envKeystorePassword
+                keyAlias = "audiooutput"
+                keyPassword = envKeyPassword
+                println("✅ Signing config loaded successfully")
+            } else {
+                println("⚠️ Warning: Signing credentials not found, APK will be unsigned")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+            if (keystorePassword != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
