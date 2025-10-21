@@ -28,6 +28,10 @@ Este aplicativo adiciona um tile personalizado às Configurações Rápidas do A
 
 📥 **[Download da última versão](https://github.com/weslley75/AudioOutputSwitcher/releases/latest)**
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/br.com.wasystems.audiooutputswitcher/)
+
 ### Compilando o APK
 
 1. Clone o repositório:
