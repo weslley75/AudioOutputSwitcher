@@ -20,6 +20,9 @@ class SoundProfilesActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sound_profiles)
 
+        // Enable dismissing dialog when touching outside
+        setFinishOnTouchOutside(true)
+
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         setupVolumeControl(R.id.seekBarMedia, AudioManager.STREAM_MUSIC)

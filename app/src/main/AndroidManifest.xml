@@ -11,7 +11,8 @@
             android:name=".SoundProfilesActivity"
             android:exported="true"
             android:label="@string/audio_output"
-            android:theme="@android:style/Theme.DeviceDefault.Settings">
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"
+            android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
