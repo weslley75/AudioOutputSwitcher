@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Audio Output Switcher</string>
     <string name="audio_output">Audio Output</string>
+    <string name="volume_media">Media Volume</string>
+    <string name="volume_ring">Ring Volume</string>
+    <string name="volume_notification">Notification Volume</string>
+    <string name="volume_alarm">Alarm Volume</string>
+    <string name="volume_system">System Volume</string>
 </resources>

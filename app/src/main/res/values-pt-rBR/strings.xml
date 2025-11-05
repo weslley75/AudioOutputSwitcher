@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="audio_output">Saída de áudio</string>
+    <string name="volume_media">Volume de mídia</string>
+    <string name="volume_ring">Volume de toque</string>
+    <string name="volume_notification">Volume de notificação</string>
+    <string name="volume_alarm">Volume de alarme</string>
+    <string name="volume_system">Volume do sistema</string>
 </resources>
