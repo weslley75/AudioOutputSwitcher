@@ -2,4 +2,5 @@
 <resources>
     <string name="audio_output">Saída de áudio</string>
     <string name="error_opening_dialog">Não foi possível abrir o seletor de saída de áudio</string>
+    <string name="tile_subtitle">Toque para alternar</string>
 </resources>

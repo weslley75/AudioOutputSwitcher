@@ -11,8 +11,8 @@ android {
         applicationId = "br.com.wasystems.audiooutputswitcher"
         minSdk = 30
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,8 +42,9 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            val keystorePassword = System.getenv("KEYSTORE_PASSWORD")
-            if (keystorePassword != null) {
+            isShrinkResources = true
+            val hasSigningCredentials = System.getenv("KEYSTORE_PASSWORD") != null
+            if (hasSigningCredentials) {
                 signingConfig = signingConfigs.getByName("release")
             }
             proguardFiles(

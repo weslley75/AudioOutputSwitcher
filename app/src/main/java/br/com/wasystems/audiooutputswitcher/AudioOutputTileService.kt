@@ -1,9 +1,10 @@
 package br.com.wasystems.audiooutputswitcher
 
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
@@ -32,6 +33,7 @@ class AudioOutputTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
+        Log.d(TAG, "onStartListening — device=${Build.MANUFACTURER} ${Build.MODEL}, SDK=${Build.VERSION.SDK_INT}, release=${Build.VERSION.RELEASE}")
         updateTile()
     }
 
@@ -52,19 +54,35 @@ class AudioOutputTileService : TileService() {
      * de toast para o usuário.
      */
     private fun openMediaOutputDialog() {
+        Log.d(TAG, "onClick — attempting broadcast to $RECEIVER_CLASS")
+
+        val receiverExists = isReceiverAvailable()
+        Log.d(TAG, "receiver exists in PackageManager: $receiverExists")
+
         try {
             val intent = Intent(ACTION_MEDIA_OUTPUT).apply {
                 component = ComponentName(PACKAGE_SYSTEMUI, RECEIVER_CLASS)
             }
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-            )
-
-            pendingIntent.send()
+            Log.d(TAG, "sending broadcast: action=$ACTION_MEDIA_OUTPUT")
+            sendBroadcast(intent)
+            Log.d(TAG, "broadcast sent successfully")
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to open audio output dialog", e)
+            Log.e(TAG, "broadcast failed: ${e::class.simpleName}: ${e.message}", e)
             showToast(getString(R.string.error_opening_dialog))
+        }
+    }
+
+    private fun isReceiverAvailable(): Boolean {
+        return try {
+            val intent = Intent(ACTION_MEDIA_OUTPUT).apply {
+                component = ComponentName(PACKAGE_SYSTEMUI, RECEIVER_CLASS)
+            }
+            val matches = packageManager.queryBroadcastReceivers(intent, PackageManager.MATCH_ALL)
+            Log.d(TAG, "queryBroadcastReceivers returned ${matches.size} match(es): ${matches.map { it.activityInfo.name }}")
+            matches.isNotEmpty()
+        } catch (e: Exception) {
+            Log.w(TAG, "queryBroadcastReceivers failed: ${e.message}")
+            false
         }
     }
 
@@ -77,7 +95,10 @@ class AudioOutputTileService : TileService() {
         val tile = qsTile ?: return
         tile.label = getString(R.string.audio_output)
         tile.icon = Icon.createWithResource(this, R.drawable.ic_audio_output)
-        tile.state = Tile.STATE_INACTIVE
+        tile.state = Tile.STATE_ACTIVE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            tile.subtitle = getString(R.string.tile_subtitle)
+        }
         tile.updateTile()
     }
 
