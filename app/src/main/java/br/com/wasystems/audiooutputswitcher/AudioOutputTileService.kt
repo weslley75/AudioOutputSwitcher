@@ -1,10 +1,12 @@
 package br.com.wasystems.audiooutputswitcher
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
@@ -66,9 +68,42 @@ class AudioOutputTileService : TileService() {
             Log.d(TAG, "sending broadcast: action=$ACTION_MEDIA_OUTPUT")
             sendBroadcast(intent)
             Log.d(TAG, "broadcast sent successfully")
+        } catch (e: SecurityException) {
+            Log.w(TAG, "broadcast blocked by system restriction, trying fallbacks", e)
+            openFallback()
         } catch (e: Exception) {
             Log.e(TAG, "broadcast failed: ${e::class.simpleName}: ${e.message}", e)
             showToast(getString(R.string.error_opening_dialog))
+        }
+    }
+
+    /**
+     * Fallback em cascata quando o broadcast é bloqueado pelo sistema.
+     * Nível 1: Volume Panel (inclui botão de output no Pixel/Android moderno)
+     * Nível 2: Sound Settings
+     */
+    private fun openFallback() {
+        if (tryOpen(Intent(Settings.Panel.ACTION_VOLUME), "Volume Panel")) return
+        if (tryOpen(Intent(Settings.ACTION_SOUND_SETTINGS), "Sound Settings")) return
+        Log.e(TAG, "all fallbacks failed")
+        showToast(getString(R.string.error_opening_dialog))
+    }
+
+    private fun tryOpen(intent: Intent, label: String): Boolean {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startActivityAndCollapse(
+                    PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                startActivityAndCollapse(intent)
+            }
+            Log.d(TAG, "opened $label as fallback")
+            true
+        } catch (e: Exception) {
+            Log.w(TAG, "$label fallback failed: ${e.message}")
+            false
         }
     }
 
