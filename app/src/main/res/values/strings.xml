@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Audio Output Switcher</string>
     <string name="audio_output">Audio Output</string>
+    <string name="error_opening_dialog">Could not open audio output dialog</string>
 </resources>

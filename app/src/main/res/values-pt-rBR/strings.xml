@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="audio_output">Saída de áudio</string>
+    <string name="error_opening_dialog">Não foi possível abrir o seletor de saída de áudio</string>
 </resources>

@@ -21,14 +21,14 @@ This is an Android application that provides a Quick Settings tile for switching
 ### Core Components
 
 - **AudioOutputTileService**: Main tile service that extends `TileService` to provide Quick Settings functionality
-  - Location: `app/src/main/java/com/example/audiooutputswitcher/AudioOutputTileService.kt`
+  - Location: `app/src/main/java/br/com/wasystems/audiooutputswitcher/AudioOutputTileService.kt`
   - Integrates with Android System UI to open the media output dialog
   - Uses PendingIntent to send broadcast to SystemUI's MediaOutputDialogReceiver
 
 ### Key Configuration
 
 - **Target SDK**: 35 (Android 15)
-- **Min SDK**: 35 (Android 15 only)
+- **Min SDK**: 30 (Android 11+)
 - **Java/Kotlin**: Version 17
 - **Namespace**: `br.com.wasystems.audiooutputswitcher`
 - **Build features**: Gradle configuration cache enabled, code minification enabled for release builds

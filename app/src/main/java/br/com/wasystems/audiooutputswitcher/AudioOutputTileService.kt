@@ -63,9 +63,8 @@ class AudioOutputTileService : TileService() {
 
             pendingIntent.send()
         } catch (e: Exception) {
-            val errorMsg = "Failed to open audio output dialog: ${e.javaClass.simpleName}: ${e.message}"
-            Log.e(TAG, errorMsg, e)
-            showToast(errorMsg)
+            Log.e(TAG, "Failed to open audio output dialog", e)
+            showToast(getString(R.string.error_opening_dialog))
         }
     }
 
@@ -78,7 +77,7 @@ class AudioOutputTileService : TileService() {
         val tile = qsTile ?: return
         tile.label = getString(R.string.audio_output)
         tile.icon = Icon.createWithResource(this, R.drawable.ic_audio_output)
-        tile.state = Tile.STATE_ACTIVE
+        tile.state = Tile.STATE_INACTIVE
         tile.updateTile()
     }
 

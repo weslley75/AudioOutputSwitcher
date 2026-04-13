@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "br.com.wasystems.audiooutputswitcher"
-        minSdk = 35
+        minSdk = 30
         targetSdk = 35
         versionCode = 4
         versionName = "1.0.3"
