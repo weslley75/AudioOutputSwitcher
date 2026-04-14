@@ -27,7 +27,8 @@ android {
             val envKeyPassword = System.getenv("KEY_PASSWORD")
 
             if (envKeystorePassword != null && envKeyPassword != null) {
-                storeFile = file("../AudioOutputSwitcher.jks")
+                val keystorePath = System.getenv("KEYSTORE_PATH") ?: "../AudioOutputSwitcher.jks"
+                storeFile = file(keystorePath)
                 storePassword = envKeystorePassword
                 keyAlias = "audiooutput"
                 keyPassword = envKeyPassword
