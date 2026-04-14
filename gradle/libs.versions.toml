@@ -1,7 +1,7 @@
 [versions]
 agp = "8.9.2"
 kotlin = "2.3.20"
-coreKtx = "1.16.0"
+coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.7.0"
