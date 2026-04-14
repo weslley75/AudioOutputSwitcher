@@ -33,6 +33,18 @@ class AudioOutputTileServiceTest {
         service = Robolectric.setupService(AudioOutputTileService::class.java)
     }
 
+    private fun registerSystemUiReceiver(svc: AudioOutputTileService) {
+        val shadowPm = Shadows.shadowOf(svc.packageManager)
+        val info = ResolveInfo().apply {
+            activityInfo = ActivityInfo().apply {
+                packageName = "com.android.systemui"
+                name = "com.android.systemui.media.dialog.MediaOutputDialogReceiver"
+            }
+        }
+        @Suppress("DEPRECATION")
+        shadowPm.addResolveInfoForIntent(svc.makeMediaOutputIntent(), info)
+    }
+
     // T4 — makeMediaOutputIntent() construction
 
     @Test
@@ -58,6 +70,7 @@ class AudioOutputTileServiceTest {
 
     @Test
     fun onClick_sendsBroadcast() {
+        registerSystemUiReceiver(service)
         val spy = spyk(service)
         every { spy.sendBroadcast(any()) } just runs
         spy.onClick()
@@ -70,6 +83,7 @@ class AudioOutputTileServiceTest {
 
     @Test
     fun onClick_securityException_triggersFallback() {
+        registerSystemUiReceiver(service)
         val spy = spyk(service)
         every { spy.sendBroadcast(any()) } throws SecurityException("blocked")
         every { spy.openFallback() } just runs
@@ -104,14 +118,7 @@ class AudioOutputTileServiceTest {
 
     @Test
     fun isReceiverAvailable_withMatches_returnsTrue() {
-        val shadowPm = Shadows.shadowOf(service.packageManager)
-        val info = ResolveInfo().apply {
-            activityInfo = ActivityInfo().apply {
-                packageName = "com.android.systemui"
-                name = "com.android.systemui.media.dialog.MediaOutputDialogReceiver"
-            }
-        }
-        shadowPm.addResolveInfoForIntent(service.makeMediaOutputIntent(), info)
+        registerSystemUiReceiver(service)
         assertTrue(service.isReceiverAvailable())
     }
 
