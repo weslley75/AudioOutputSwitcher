@@ -13,6 +13,7 @@ Este aplicativo adiciona um tile personalizado às Configurações Rápidas do A
 ## ✨ Funcionalidades
 
 - 🎧 Acesso rápido ao seletor de saída de áudio
+- 🔊 Pressione longamente o tile para abrir o painel de volume do sistema
 - 🔄 Integração com o sistema nativo do Android
 - 🌐 Suporte a português brasileiro e inglês
 - 📱 Compatível com Android 11+ (API 30+), compilado com API 36
@@ -58,14 +59,17 @@ cd AudioOutputSwitcher
 ## 🎯 Como usar
 
 1. Deslize para baixo para abrir as Configurações Rápidas
-2. Toque no tile "Audio Output"
+2. Toque no tile "Audio Output" para abrir o seletor de saída de áudio
 3. Selecione o dispositivo de áudio desejado no diálogo que abrir
+
+**Pressione longamente** o tile para abrir o painel de volume do sistema e ajustar volumes de mídia, notificações e alarmes.
 
 ## 🏗️ Arquitetura
 
 O aplicativo é composto por:
 
 - **AudioOutputTileService**: Serviço principal que implementa o tile das configurações rápidas
+- **VolumePanelActivity**: Activity transparente acionada pelo long press do tile, abre o painel de volume do sistema
 - **Sistema de integração**: Comunica-se com o SystemUI do Android para abrir o diálogo nativo via broadcast
 - **Fallback em cascata**: Caso o broadcast seja bloqueado pela ROM, o app tenta abrir o Painel de Volume e, em seguida, as Configurações de Som
 - **Recursos localizados**: Suporte a múltiplos idiomas
@@ -108,7 +112,8 @@ git push origin v1.0.1
 ```
 app/src/main/
 ├── java/br/com/wasystems/audiooutputswitcher/
-│   └── AudioOutputTileService.kt    # Serviço principal do tile
+│   ├── AudioOutputTileService.kt    # Serviço principal do tile
+│   └── VolumePanelActivity.kt       # Activity de long press (painel de volume)
 ├── res/
 │   ├── values/strings.xml           # Strings em inglês
 │   ├── values-pt-rBR/strings.xml    # Strings em português
