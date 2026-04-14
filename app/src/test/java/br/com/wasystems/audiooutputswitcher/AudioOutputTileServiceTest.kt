@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [33])
+@Config(sdk = [30, 33, 36])
 class AudioOutputTileServiceTest {
 
     private lateinit var service: AudioOutputTileService

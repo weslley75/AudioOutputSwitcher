@@ -33,6 +33,9 @@ proguard/
 # Android Studio Navigation editor temp files
 .navigation/
 
+# IDE deployment target state (local device selection)
+.idea/deploymentTargetSelector.xml
+
 # Android Studio captures folder
 captures/
 
@@ -89,6 +92,9 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Database files
+*.db
 
 # OS generated files
 .DS_Store

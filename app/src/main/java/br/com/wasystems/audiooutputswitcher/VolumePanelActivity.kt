@@ -1,9 +1,8 @@
 package br.com.wasystems.audiooutputswitcher
 
 import android.app.Activity
-import android.content.Intent
+import android.content.ActivityNotFoundException
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 
 class VolumePanelActivity : Activity() {
@@ -19,18 +18,19 @@ class VolumePanelActivity : Activity() {
     }
 
     private fun openVolumePanel() {
-        try {
-            @Suppress("DEPRECATION")
-            startActivity(Intent(Settings.Panel.ACTION_VOLUME))
-            Log.d(TAG, "Volume Panel opened")
-        } catch (e: Exception) {
-            Log.w(TAG, "Volume Panel failed, trying Sound Settings: ${e.message}")
+        val opened = AudioOutputFallback.tryEach { intent ->
             try {
-                startActivity(Intent(Settings.ACTION_SOUND_SETTINGS))
-                Log.d(TAG, "Sound Settings opened as fallback")
-            } catch (e2: Exception) {
-                Log.e(TAG, "all fallbacks failed: ${e2.message}")
+                startActivity(intent)
+                Log.d(TAG, "opened: ${intent.action}")
+                true
+            } catch (e: ActivityNotFoundException) {
+                Log.w(TAG, "activity not found: ${intent.action}: ${e.message}")
+                false
+            } catch (e: Exception) {
+                Log.w(TAG, "failed to open ${intent.action}: ${e.message}")
+                false
             }
         }
+        if (!opened) Log.e(TAG, "all fallbacks failed")
     }
 }

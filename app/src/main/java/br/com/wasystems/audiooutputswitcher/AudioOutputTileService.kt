@@ -1,12 +1,13 @@
 package br.com.wasystems.audiooutputswitcher
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
@@ -84,13 +85,16 @@ class AudioOutputTileService : TileService() {
      * Nível 2: Sound Settings
      */
     @VisibleForTesting internal fun openFallback() {
-        if (tryOpen(Intent(Settings.Panel.ACTION_VOLUME), "Volume Panel")) return
-        if (tryOpen(Intent(Settings.ACTION_SOUND_SETTINGS), "Sound Settings")) return
-        Log.e(TAG, "all fallbacks failed")
-        showToast(getString(R.string.error_opening_dialog))
+        val opened = AudioOutputFallback.tryEach { intent -> tryOpen(intent) }
+        if (!opened) {
+            Log.e(TAG, "all fallbacks failed")
+            showToast(getString(R.string.error_opening_dialog))
+        }
     }
 
-    private fun tryOpen(intent: Intent, label: String): Boolean {
+    @SuppressLint("StartActivityAndCollapseDeprecated")
+    private fun tryOpen(intent: Intent): Boolean {
+        val action = intent.action ?: "Unknown"
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 startActivityAndCollapse(
@@ -100,10 +104,13 @@ class AudioOutputTileService : TileService() {
                 @Suppress("DEPRECATION")
                 startActivityAndCollapse(intent)
             }
-            Log.d(TAG, "opened $label as fallback")
+            Log.d(TAG, "opened $action as fallback")
             true
+        } catch (e: ActivityNotFoundException) {
+            Log.w(TAG, "$action activity not found: ${e.message}")
+            false
         } catch (e: Exception) {
-            Log.w(TAG, "$label fallback failed: ${e.message}")
+            Log.w(TAG, "$action fallback failed: ${e.message}")
             false
         }
     }
@@ -137,9 +144,7 @@ class AudioOutputTileService : TileService() {
         tile.label = getString(R.string.audio_output)
         tile.icon = Icon.createWithResource(this, R.drawable.ic_audio_output)
         tile.state = Tile.STATE_ACTIVE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            tile.subtitle = getString(R.string.tile_subtitle)
-        }
+        tile.subtitle = getString(R.string.tile_subtitle)
         tile.updateTile()
     }
 
