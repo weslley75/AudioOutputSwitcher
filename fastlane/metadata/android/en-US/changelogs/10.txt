@@ -1,0 +1,3 @@
+• Long press on tile now opens the volume panel
+• Improved fallback handling when media output dialog is unavailable
+• Better compatibility with custom ROMs via explicit SystemUI package query

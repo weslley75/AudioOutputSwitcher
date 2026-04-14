@@ -1,0 +1,3 @@
+• Toque longo no tile agora abre o painel de volume
+• Melhoria no tratamento de fallback quando o seletor de mídia não está disponível
+• Melhor compatibilidade com ROMs customizadas via consulta explícita ao pacote SystemUI
