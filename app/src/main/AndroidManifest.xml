@@ -20,5 +20,13 @@
                 android:name="android.service.quicksettings.TILE"
                 android:value="false" />
         </service>
+        <activity
+            android:name=".VolumePanelActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
