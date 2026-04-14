@@ -22,3 +22,8 @@
 
 # Keep the TileService so it is not removed or renamed by minification
 -keep class br.com.wasystems.audiooutputswitcher.AudioOutputTileService { *; }
+
+# Preserve debug attributes for readable stack traces
+-keepattributes SourceFile,LineNumberTable
+-keepattributes *Annotation*,Signature
+-renamesourcefileattribute SourceFile

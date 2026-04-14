@@ -11,6 +11,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 
 /**
  * Serviço de tile para configurações rápidas que permite acesso rápido ao
@@ -19,9 +20,6 @@ import android.widget.Toast
  * Este tile integra-se com o SystemUI do Android para abrir o diálogo
  * de saída de áudio que permite alternar entre dispositivos como
  * fones de ouvido, alto-falantes e dispositivos Bluetooth.
- *
- * @author WA Systems
- * @since 1.0.0
  */
 class AudioOutputTileService : TileService() {
     companion object {
@@ -35,7 +33,9 @@ class AudioOutputTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        Log.d(TAG, "onStartListening — device=${Build.MANUFACTURER} ${Build.MODEL}, SDK=${Build.VERSION.SDK_INT}, release=${Build.VERSION.RELEASE}")
+        if (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, "onStartListening — device=${Build.MANUFACTURER} ${Build.MODEL}, SDK=${Build.VERSION.SDK_INT}, release=${Build.VERSION.RELEASE}")
+        }
         updateTile()
     }
 
@@ -58,13 +58,14 @@ class AudioOutputTileService : TileService() {
     private fun openMediaOutputDialog() {
         Log.d(TAG, "onClick — attempting broadcast to $RECEIVER_CLASS")
 
-        val receiverExists = isReceiverAvailable()
-        Log.d(TAG, "receiver exists in PackageManager: $receiverExists")
+        if (!isReceiverAvailable()) {
+            Log.w(TAG, "receiver not found in PackageManager, skipping broadcast")
+            openFallback()
+            return
+        }
 
         try {
-            val intent = Intent(ACTION_MEDIA_OUTPUT).apply {
-                component = ComponentName(PACKAGE_SYSTEMUI, RECEIVER_CLASS)
-            }
+            val intent = makeMediaOutputIntent()
             Log.d(TAG, "sending broadcast: action=$ACTION_MEDIA_OUTPUT")
             sendBroadcast(intent)
             Log.d(TAG, "broadcast sent successfully")
@@ -82,7 +83,7 @@ class AudioOutputTileService : TileService() {
      * Nível 1: Volume Panel (inclui botão de output no Pixel/Android moderno)
      * Nível 2: Sound Settings
      */
-    private fun openFallback() {
+    @VisibleForTesting internal fun openFallback() {
         if (tryOpen(Intent(Settings.Panel.ACTION_VOLUME), "Volume Panel")) return
         if (tryOpen(Intent(Settings.ACTION_SOUND_SETTINGS), "Sound Settings")) return
         Log.e(TAG, "all fallbacks failed")
@@ -107,13 +108,18 @@ class AudioOutputTileService : TileService() {
         }
     }
 
-    private fun isReceiverAvailable(): Boolean {
+    @VisibleForTesting internal fun makeMediaOutputIntent(): Intent =
+        Intent(ACTION_MEDIA_OUTPUT).apply {
+            component = ComponentName(PACKAGE_SYSTEMUI, RECEIVER_CLASS)
+        }
+
+    @VisibleForTesting internal fun isReceiverAvailable(): Boolean {
         return try {
-            val intent = Intent(ACTION_MEDIA_OUTPUT).apply {
-                component = ComponentName(PACKAGE_SYSTEMUI, RECEIVER_CLASS)
-            }
+            val intent = makeMediaOutputIntent()
             val matches = packageManager.queryBroadcastReceivers(intent, PackageManager.MATCH_ALL)
-            Log.d(TAG, "queryBroadcastReceivers returned ${matches.size} match(es): ${matches.map { it.activityInfo.name }}")
+            if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "queryBroadcastReceivers returned ${matches.size} match(es): ${matches.map { it.activityInfo.name }}")
+            }
             matches.isNotEmpty()
         } catch (e: Exception) {
             Log.w(TAG, "queryBroadcastReceivers failed: ${e.message}")

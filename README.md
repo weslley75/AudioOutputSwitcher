@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/weslley75/AudioOutputSwitcher/actions/workflows/build.yml/badge.svg)](https://github.com/weslley75/AudioOutputSwitcher/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![API](https://img.shields.io/badge/API-35%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=35)
+[![API](https://img.shields.io/badge/API-30%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=30)
 
 Um tile de configurações rápidas (Quick Settings) para Android que permite trocar facilmente entre dispositivos de saída de áudio.
 
@@ -15,13 +15,13 @@ Este aplicativo adiciona um tile personalizado às Configurações Rápidas do A
 - 🎧 Acesso rápido ao seletor de saída de áudio
 - 🔄 Integração com o sistema nativo do Android
 - 🌐 Suporte a português brasileiro e inglês
-- 📱 Compatível com Android 15 (API 35)
+- 📱 Compatível com Android 11+ (API 30+), compilado com API 36
 - ⚡ Leve e sem consumo de bateria em segundo plano
 
 ## 🚀 Instalação
 
 ### Pré-requisitos
-- Android 15 (API 35) ou superior
+- Android 11 (API 30) ou superior
 - Android Studio (para compilação)
 
 ### Baixar APK pronto
@@ -66,7 +66,8 @@ cd AudioOutputSwitcher
 O aplicativo é composto por:
 
 - **AudioOutputTileService**: Serviço principal que implementa o tile das configurações rápidas
-- **Sistema de integração**: Comunica-se com o SystemUI do Android para abrir o diálogo nativo
+- **Sistema de integração**: Comunica-se com o SystemUI do Android para abrir o diálogo nativo via broadcast
+- **Fallback em cascata**: Caso o broadcast seja bloqueado pela ROM, o app tenta abrir o Painel de Volume e, em seguida, as Configurações de Som
 - **Recursos localizados**: Suporte a múltiplos idiomas
 
 ## 📦 Releases Automáticos
@@ -75,7 +76,8 @@ O projeto usa GitHub Actions para:
 - ✅ Build automático em cada push/PR
 - ✅ Testes automatizados
 - ✅ Release automático quando você criar uma tag `v*`
-- ✅ APK disponível nos artifacts e releases
+- ✅ APK debug e release disponíveis nos artifacts e releases
+- ✅ Dependabot configurado para atualizar dependências automaticamente
 
 **Para criar um release:**
 ```bash
@@ -104,12 +106,14 @@ git push origin v1.0.1
 ### Estrutura do projeto
 
 ```
-app/src/main/java/br/com/wasystems/audiooutputswitcher/
-├── AudioOutputTileService.kt    # Serviço principal do tile
-└── res/
-    ├── values/strings.xml       # Strings em inglês
-    ├── values-pt-rBR/strings.xml # Strings em português
-    └── drawable/ic_audio_output.xml # Ícone do tile
+app/src/main/
+├── java/br/com/wasystems/audiooutputswitcher/
+│   └── AudioOutputTileService.kt    # Serviço principal do tile
+├── res/
+│   ├── values/strings.xml           # Strings em inglês
+│   ├── values-pt-rBR/strings.xml    # Strings em português
+│   └── drawable/ic_audio_output.xml # Ícone do tile
+└── AndroidManifest.xml
 ```
 
 ## 🤝 Contribuindo
@@ -128,13 +132,13 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 ## 🐛 Problemas conhecidos
 
-- Requer Android 15 ou superior devido ao uso de APIs específicas do SystemUI
+- Requer Android 11 ou superior (minSdk 30)
 - Pode não funcionar em algumas ROMs customizadas que modificam o SystemUI
 
 ## 🔧 Solução de problemas
 
 **O tile não aparece nas configurações rápidas:**
-- Verifique se você está usando Android 15 ou superior
+- Verifique se você está usando Android 11 ou superior
 - Reinicie o dispositivo após a instalação
 
 **O diálogo não abre:**

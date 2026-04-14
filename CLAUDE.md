@@ -27,11 +27,13 @@ This is an Android application that provides a Quick Settings tile for switching
 
 ### Key Configuration
 
-- **Target SDK**: 35 (Android 15)
+- **Compile SDK**: 36 (Android 16)
+- **Target SDK**: 36 (Android 16)
 - **Min SDK**: 30 (Android 11+)
 - **Java/Kotlin**: Version 17
 - **Namespace**: `br.com.wasystems.audiooutputswitcher`
-- **Build features**: Gradle configuration cache enabled, code minification enabled for release builds
+- **Build features**: Gradle configuration cache enabled, code minification and resource shrinking enabled for release builds
+- **F-Droid compatibility**: `dependenciesInfo { includeInApk = false }` strips Google Play dependency metadata from the APK
 
 ### Manifest Configuration
 
@@ -39,12 +41,18 @@ The app registers a Quick Settings tile service with:
 - Permission: `android.permission.BIND_QUICK_SETTINGS_TILE`
 - Intent filter: `android.service.quicksettings.action.QS_TILE`
 - Custom icon: `@drawable/ic_audio_output`
+- `android:value="false"` in the TILE meta-data — tile is inactive by default and must be manually added by the user via the Quick Settings editor
 
 ### System Integration
 
 The tile communicates with Android's SystemUI through:
 - Action: `com.android.systemui.action.LAUNCH_SYSTEM_MEDIA_OUTPUT_DIALOG`
 - Target: `com.android.systemui.media.dialog.MediaOutputDialogReceiver`
+
+When the broadcast is blocked (e.g. on custom ROMs), the service falls back in cascade:
+1. `Settings.Panel.ACTION_VOLUME` — Volume Panel (includes output switcher on stock Android)
+2. `Settings.ACTION_SOUND_SETTINGS` — Sound Settings page
+3. Toast error message if all fallbacks fail
 
 ### Localization
 
