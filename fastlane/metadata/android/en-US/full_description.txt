@@ -2,10 +2,11 @@ Audio Output Switcher adds a Quick Settings tile that provides instant access to
 
 FEATURES:
 • Quick access to audio output selector
+• Tap to open the native media output dialog
+• Long press to open the volume panel
 • Integration with native Android system
 • Support for all connected audio devices (headphones, speakers, Bluetooth)
 • Lightweight with no background battery usage
-• Material Design interface
 
 USAGE:
 1. Install the app
@@ -15,4 +16,4 @@ USAGE:
 
 Perfect for users who frequently switch between headphones, speakers, and Bluetooth devices.
 
-The app requires Android 15+ and integrates directly with the system's MediaOutputDialog for a seamless experience.
+The app requires Android 11+ and integrates directly with the system's MediaOutputDialog for a seamless experience.
